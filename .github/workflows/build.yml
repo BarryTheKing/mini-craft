@@ -1,1 +1,18 @@
+name: Build APK
 
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build APK
+        run: docker run --rm -v "$PWD":/root/src -w /root/src notfl3/cargo-apk cargo quad-apk build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mini_craft-apk
+          path: target/android-artifacts/debug/apk/mini_craft.apk
